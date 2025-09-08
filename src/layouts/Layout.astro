@@ -16,35 +16,23 @@ interface Props {
 const { addTitleSuffix, description, image } = Astro.props;
 
 const configData: SiteConfig = (await fetchData()) || {};
-const titleSuffix =
-  configData.titleSuffix && addTitleSuffix !== false
-    ? configData.titleSuffix
-    : undefined;
+const titleSuffix = configData.titleSuffix && addTitleSuffix !== false ? configData.titleSuffix : undefined;
 const title = [Astro.props.title, titleSuffix].filter(Boolean).join(' | ');
-
-// 安全に resolvedImage を生成
-let resolvedImage: { src: string } | undefined = undefined;
-if (image && typeof image.src === "string") {
-  try {
-    resolvedImage = {
-      src: Astro.site
-        ? new URL(image.src, Astro.site).toString()
-        : image.src
-    };
-  } catch {
-    resolvedImage = { src: image.src };
-  }
-}
-
+const resolvedImage = image?.src ? { src: new URL(image.src, Astro.site).toString() } : undefined;
 const canonicalURL = new URL(Astro.request.url, Astro.site);
 
 /**
  * Enforce some standard canonical URL formatting across the site.
  */
 function formatCanonicalURL(url: string | URL) {
-  const path = url.toString();
-  const hasQueryParams = path.includes('?');
-  return hasQueryParams ? path : path.replace(/\/$/, '');
+    const path = url.toString();
+    const hasQueryParams = path.includes('?');
+    // If there are query params, make sure the URL has no trailing slash
+    if (hasQueryParams) {
+        path.replace(/\/?$/, '');
+    }
+    // otherwise, canonical URL always has a trailing slash
+    return path.replace(/\/?$/, hasQueryParams ? '' : '/');
 }
 ---
 
