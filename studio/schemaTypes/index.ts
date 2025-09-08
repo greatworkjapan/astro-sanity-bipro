@@ -16,6 +16,10 @@ import person from './person'
 import siteConfig from './siteConfig'
 import testimonial from './testimonial'
 import testimonialsSection from './testimonialsSection'
+import post from './post'
+import category from './category'
+import tag from './tag'
+import seo from './seo'
 
 export const schemaTypes = [
   actionButton,
@@ -36,4 +40,8 @@ export const schemaTypes = [
   siteConfig,
   testimonial,
   testimonialsSection,
+  post,
+  category,
+  tag,
+  seo
 ]
