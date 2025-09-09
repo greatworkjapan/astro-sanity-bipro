@@ -1,0 +1,53 @@
+---
+import { client } from "../../lib/sanity"
+import { postSlugsQuery, postBySlugQuery } from "../../lib/queries"
+import { renderPortableText } from "../../lib/portableText"
+
+export async function getStaticPaths() {
+  const slugs = await client.fetch(postSlugsQuery)
+  return slugs.map((s:any) => ({ params: { slug: s.slug }}))
+}
+
+const { slug } = Astro.params
+const post = await client.fetch(postBySlugQuery, { slug })
+
+if (!post) return Astro.redirect('/blog') // 念のため
+
+const html = renderPortableText(post.body)
+---
+
+<html lang="ja">
+  <head>
+    <title>{post.seo?.seoTitle ?? post.title}</title>
+    {post.seo?.seoDescription && <meta name="description" content={post.seo.seoDescription} />}
+  </head>
+  <body>
+    <article>
+      <h1>{post.title}</h1>
+      <time datetime={post.publishedAt}>
+        {new Date(post.publishedAt).toLocaleDateString('ja-JP')}
+      </time>
+
+      <div set:html={html} />
+
+      {post.categories?.length && (
+        <p>カテゴリ：
+          {post.categories.map((c:any, i:number) => (
+            <>
+              <a href={`/blog/category/${c.slug}`}>{c.title}</a>{i < post.categories.length-1 ? ' / ' : ''}
+            </>
+          ))}
+        </p>
+      )}
+      {post.tags?.length && (
+        <p>タグ：
+          {post.tags.map((t:any, i:number) => (
+            <>
+              <a href={`/blog/tag/${t.slug}`}>{t.title}</a>{i < post.tags.length-1 ? ' , ' : ''}
+            </>
+          ))}
+        </p>
+      )}
+    </article>
+  </body>
+</html>
