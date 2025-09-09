@@ -1,0 +1,25 @@
+---
+import { client } from "../lib/sanity"
+const posts = await client.fetch(`
+  *[_type=="post"] | order(publishedAt desc)[0..9]{
+    title, excerpt, "slug": slug.current, publishedAt
+  }
+`)
+---
+
+<html lang="ja">
+  <body>
+    <h1>最新記事</h1>
+    <ul>
+      {posts.map((p:any)=>(
+        <li>
+          <a href={`/blog/${p.slug}`}>{p.title}</a>
+          <small>{new Date(p.publishedAt).toLocaleDateString('ja-JP')}</small>
+          <p>{p.excerpt}</p>
+        </li>
+      ))}
+    </ul>
+
+    <p><a href="/blog">→ すべてのブログ記事</a></p>
+  </body>
+</html>
