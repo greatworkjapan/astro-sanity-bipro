@@ -1,0 +1,21 @@
+---
+import { client } from "../../lib/sanity"
+import { allPostsQuery } from "../../lib/queries"
+
+const posts = await client.fetch(allPostsQuery)
+---
+
+<html lang="ja">
+  <body>
+    <h1>ブログ</h1>
+    <ul>
+      {posts.map((p:any) => (
+        <li>
+          <a href={`/blog/${p.slug}`}>{p.title}</a>
+          <small>{new Date(p.publishedAt).toLocaleDateString('ja-JP')}</small>
+          <p>{p.excerpt}</p>
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
