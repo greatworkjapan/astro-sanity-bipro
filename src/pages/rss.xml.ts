@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
-import { client } from '../../lib/sanity'
-import { allPostsQuery } from '../../lib/queries'
+import { client } from "../lib/sanity"
+import { allPostsQuery } from "../lib/queries"
 
 export const GET: APIRoute = async () => {
   const posts = await client.fetch(allPostsQuery)
