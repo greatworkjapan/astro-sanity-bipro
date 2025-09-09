@@ -1,0 +1,26 @@
+---
+import { client } from "../../../lib/sanity"
+import { categorySlugsQuery, postsByCategoryQuery } from "../../../lib/queries"
+
+export async function getStaticPaths() {
+  const cats = await client.fetch(categorySlugsQuery)
+  return cats.map((c:any) => ({ params: { slug: c.slug }}))
+}
+
+const { slug } = Astro.params
+const posts = await client.fetch(postsByCategoryQuery, { slug })
+---
+
+<html lang="ja">
+  <body>
+    <h1>カテゴリー: {slug}</h1>
+    <ul>
+      {posts.map((p:any)=>(
+        <li>
+          <a href={`/blog/${p.slug}`}>{p.title}</a>
+          <p>{p.excerpt}</p>
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
