@@ -1,0 +1,26 @@
+---
+import { client } from "../../../lib/sanity"
+import { tagSlugsQuery, postsByTagQuery } from "../../../lib/queries"
+
+export async function getStaticPaths() {
+  const tags = await client.fetch(tagSlugsQuery)
+  return tags.map((t:any) => ({ params: { slug: t.slug }}))
+}
+
+const { slug } = Astro.params
+const posts = await client.fetch(postsByTagQuery, { slug })
+---
+
+<html lang="ja">
+  <body>
+    <h1>タグ: {slug}</h1>
+    <ul>
+      {posts.map((p:any)=>(
+        <li>
+          <a href={`/blog/${p.slug}`}>{p.title}</a>
+          <p>{p.excerpt}</p>
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
