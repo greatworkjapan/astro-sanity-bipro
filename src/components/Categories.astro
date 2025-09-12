@@ -1,0 +1,33 @@
+---
+const categories = [
+  { name: '美容機器', description: '脱毛機から痩身、フェイシャルまで最新機器を徹底比較。', href: '/devices', icon: '⚡️' },
+  { name: 'サロン商材', description: 'シャンプーやネイル用品など、業務用商材の選び方と仕入れ。', href: '/products', icon: '🧴' },
+  { name: '経営・ノウハウ', description: '集客、人材育成、コスト削減など、サロン運営のヒントが満載。', href: '/management', icon: '📈' },
+  { name: '開業ガイド', description: '独立・開業の準備から手続きまで、夢を形にする完全ガイド。', href: '/startup', icon: '🔑' },
+  { name: 'デジタル集客', description: 'HP制作、SEO/MEO対策、SNS活用でオンライン集客を強化。', href: '/digital-marketing', icon: '📱' },
+  { name: 'ニュース', description: '業界の最新トレンド、イベント、法改正などの情報をお届け。', href: '/news', icon: '📰' },
+];
+---
+<section class="py-16 bg-gray-50 sm:py-24">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        カテゴリーから探す
+      </h2>
+      <p class="mt-4 text-lg text-gray-600">
+        知りたい情報に合わせて、カテゴリーをお選びください。
+      </p>
+    </div>
+    <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {categories.map(category => (
+        <a href={category.href} class="block p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+          <div class="flex items-center">
+            <span class="text-4xl">{category.icon}</span>
+            <h3 class="ml-4 text-2xl font-bold text-gray-900">{category.name}</h3>
+          </div>
+          <p class="mt-4 text-gray-600">{category.description}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
