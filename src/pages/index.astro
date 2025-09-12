@@ -1,25 +1,25 @@
 ---
-import { client } from "../lib/sanity"
-const posts = await client.fetch(`
-  *[_type=="post"] | order(publishedAt desc)[0..9]{
-    title, excerpt, "slug": slug.current, publishedAt
-  }
-`)
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import Categories from '../components/Categories.astro';
+import NewPosts from '../components/NewPosts.astro';
+import CTA from '../components/CTA.astro';
+
+// Sanityから最新記事を6件取得する想定
+// const posts = await client.fetch(`...`);
+const posts = [
+  { slug: 'post-1', title: '【2024年版】業務用脱毛機おすすめランキング', excerpt: '最新の業務用脱毛機を徹底比較！サロンに最適な一台を見つけましょう。', publishedAt: '2024-07-15' },
+  { slug: 'post-2', title: 'HIFU（ハイフ）の効果と選び方ガイド', excerpt: '人気の痩身機器HIFUについて、効果や導入のポイントを解説します。', publishedAt: '2024-07-12' },
+  { slug: 'post-3', title: 'サロン集客を成功させるSNS活用術', excerpt: 'InstagramやTikTokを使った効果的な集客方法をご紹介。', publishedAt: '2024-07-10' },
+  { slug: 'post-4', title: '失敗しない！エステサロン開業準備の完全ロードマップ', excerpt: '開業計画から資金調達、物件選びまで、ステップごとに詳しく解説します。', publishedAt: '2024-07-08' },
+  { slug: 'post-5', title: '業務用シャンプーの賢い仕入れ先選び', excerpt: 'コストと品質を両立させる、おすすめの美容ディーラーをご紹介。', publishedAt: '2024-07-05' },
+  { slug: 'post-6', title: 'MEO対策で地域No.1サロンを目指す方法', excerpt: 'Googleマップで上位表示させ、新規顧客を獲得するための具体的な手順。', publishedAt: '2024-07-02' },
+];
 ---
 
-<html lang="ja">
-  <body>
-    <h1>最新記事</h1>
-    <ul>
-      {posts.map((p:any)=>(
-        <li>
-          <a href={`/blog/${p.slug}`}>{p.title}</a>
-          <small>{new Date(p.publishedAt).toLocaleDateString('ja-JP')}</small>
-          <p>{p.excerpt}</p>
-        </li>
-      ))}
-    </ul>
-
-    <p><a href="/blog">→ すべてのブログ記事</a></p>
-  </body>
-</html>
+<Layout title="サロン運営者のための専門情報サイト | Salon Biz Support">
+  <HeroSection />
+  <Categories />
+  <NewPosts posts={posts} />
+  <CTA />
+</Layout>
