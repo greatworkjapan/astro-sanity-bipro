@@ -1,21 +1,27 @@
 ---
-import { client } from "../../lib/sanity"
-import { allPostsQuery } from "../../lib/queries"
-
-const posts = await client.fetch(allPostsQuery)
+import Layout from "../../layouts/Layout.astro";
 ---
 
-<html lang="ja">
-  <body>
-    <h1>ブログ</h1>
-    <ul>
-      {posts.map((p:any) => (
-        <li>
-          <a href={`/blog/${p.slug}`}>{p.title}</a>
-          <small>{new Date(p.publishedAt).toLocaleDateString('ja-JP')}</small>
-          <p>{p.excerpt}</p>
-        </li>
-      ))}
+<Layout>
+  <section class="p-8">
+    <h1 class="text-3xl font-bold mb-6">Blog</h1>
+    <p class="mb-4 text-gray-600">
+      ブログ記事一覧ページです。TailwindCSS と DaisyUI のスタイルが反映されます。
+    </p>
+
+    <ul class="space-y-4">
+      <li class="p-4 border rounded-lg hover:bg-base-200 transition">
+        <a href="/blog/content/sample-1" class="text-primary font-semibold">
+          サンプル記事1
+        </a>
+        <p class="text-sm text-gray-500">記事の概要テキスト</p>
+      </li>
+      <li class="p-4 border rounded-lg hover:bg-base-200 transition">
+        <a href="/blog/content/sample-2" class="text-primary font-semibold">
+          サンプル記事2
+        </a>
+        <p class="text-sm text-gray-500">記事の概要テキスト</p>
+      </li>
     </ul>
-  </body>
-</html>
+  </section>
+</Layout>
