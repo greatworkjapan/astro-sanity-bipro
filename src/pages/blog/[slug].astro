@@ -2,7 +2,8 @@
 import Layout from "../../layouts/Layout.astro";
 import { client } from "../../lib/sanity";
 import { postSlugsQuery, postBySlugQuery } from "../../lib/queries";
-import { renderPortableText } from "../../lib/portableText";
+import { PortableText } from "@portabletext/astro";
+import { portableTextComponents } from "../../lib/portableTextComponents"; // 自作マッピング
 
 export async function getStaticPaths() {
   const slugs = await client.fetch(postSlugsQuery);
@@ -12,10 +13,7 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const post = await client.fetch(postBySlugQuery, { slug });
 
-if (!post) return Astro.redirect("/blog"); // 念のため
-
-// Rich Text 用の HTML に変換
-const richHtml = post.bodyRich ? renderPortableText(post.bodyRich) : null;
+if (!post) return Astro.redirect("/blog");
 
 const permalink = `/blog/${slug}`;
 ---
@@ -96,7 +94,10 @@ const permalink = `/blog/${slug}`;
         {post.editorMode === "html" ? (
           <div class="prose max-w-none" set:html={post.bodyHtml}></div>
         ) : (
-          <div class="prose max-w-none" set:html={richHtml}></div>
+          <PortableText
+            value={post.bodyRich}
+            components={portableTextComponents}
+          />
         )}
 
         {post.tags?.length && (
