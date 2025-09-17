@@ -1,9 +1,10 @@
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
+import typography from "@tailwindcss/typography";
+import daisyui from "daisyui";
+
 export default {
-  content: [
-    "./src/**/*.{astro,html,js,jsx,ts,tsx,vue,svelte}"
-  ],
+  content: ["./src/**/*.{astro,html,js,jsx,ts,tsx,vue,svelte,md,mdx}"],
   theme: {
     extend: {
       typography: (theme) => ({
@@ -57,9 +58,7 @@ export default {
             a: {
               color: theme("colors.blue.600"),
               textDecoration: "underline",
-              "&:hover": {
-                color: theme("colors.blue.800"),
-              },
+              "&:hover": { color: theme("colors.blue.800") },
             },
             table: {
               width: "100%",
@@ -99,13 +98,13 @@ export default {
     themes: [
       {
         dark: {
-          "primary": "#ffae9c",
+          primary: "#ffae9c",
           "primary-content": "#171227",
-          "secondary": "#fff2d7",
+          secondary: "#fff2d7",
           "secondary-content": "#171227",
-          "accent": "#e3f1ff",
+          accent: "#e3f1ff",
           "accent-content": "#171227",
-          "neutral": "#2e293c",
+          neutral: "#2e293c",
           "neutral-content": "#ffffff",
           "base-100": "#171227",
           "base-200": "#2e293c",
@@ -114,13 +113,13 @@ export default {
       },
       {
         light: {
-          "primary": "#ffae9c",
+          primary: "#ffae9c",
           "primary-content": "#171227",
-          "secondary": "#fff2d7",
+          secondary: "#fff2d7",
           "secondary-content": "#171227",
-          "accent": "#e3f1ff",
+          accent: "#e3f1ff",
           "accent-content": "#171227",
-          "neutral": "#171227",
+          neutral: "#171227",
           "neutral-content": "#ffffff",
           "base-100": "#ffffff",
           "base-200": "#d7d8e4",
@@ -129,5 +128,5 @@ export default {
       },
     ],
   },
-  plugins: [require("@tailwindcss/typography"), require("daisyui")],
+  plugins: [typography, daisyui],
 };
