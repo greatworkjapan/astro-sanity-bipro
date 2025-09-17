@@ -21,8 +21,16 @@ export const postBySlugQuery = `
   "slug": slug.current,
   "categories": categories[]->{"title": title, "slug": slug.current},
   "tags": tags[]->{"title": title, "slug": slug.current},
-  seo
+  seo,
+  mainImage{
+    url,
+    alt,
+    caption
+  },
+  "prev": *[_type=="post" && publishedAt < ^.publishedAt] | order(publishedAt desc)[0]{title, "slug":slug.current},
+  "next": *[_type=="post" && publishedAt > ^.publishedAt] | order(publishedAt asc)[0]{title, "slug":slug.current}
 }
+`
 `
 
 export const categorySlugsQuery = `*[_type=="category"]{"slug":slug.current,title}`
