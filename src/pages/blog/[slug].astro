@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { client } from "../../lib/sanity";
 import { postSlugsQuery, postBySlugQuery } from "../../lib/queries";
 import { PortableText } from "@portabletext/astro";
-import { portableTextComponents } from "../../lib/portableTextComponents"; // 自作マッピング
+import { portableTextComponents } from "../../lib/portableTextComponents";
 
 export async function getStaticPaths() {
   const slugs = await client.fetch(postSlugsQuery);
