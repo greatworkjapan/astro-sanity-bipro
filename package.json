@@ -23,7 +23,10 @@
     "marked": "^15.0.4",
     "tailwindcss": "^4.0.9",
     "@tailwindcss/typography": "^0.5.10",
-    "@portabletext/react": "^3.0.18"
+    "@portabletext/react": "^3.0.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@astrojs/react": "^3.0.0"
   },
   "devDependencies": {
     "@sanity/export": "^3.38.1",
