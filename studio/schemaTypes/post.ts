@@ -42,10 +42,16 @@ defineField({
   title: "Body (Rich Text)",
   type: "array",
   of: [
-    { type: "block" },
     {
-      type: "code",
-      options: { language: "html" },
+      type: "block",
+      marks: {
+        decorators: [
+          { title: "Strong", value: "strong" },
+          { title: "Emphasis", value: "em" },
+          { title: "Underline", value: "underline" },
+          { title: "Code", value: "code" },
+        ],
+      },
     },
     {
       type: "image",
