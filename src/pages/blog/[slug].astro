@@ -14,7 +14,9 @@ const post = await client.fetch(postBySlugQuery, { slug });
 
 if (!post) return Astro.redirect("/blog"); // 念のため
 
-const html = renderPortableText(post.body);
+// Rich Text 用の HTML に変換
+const richHtml = post.bodyRich ? renderPortableText(post.bodyRich) : null;
+
 const permalink = `/blog/${slug}`;
 ---
 
@@ -90,7 +92,12 @@ const permalink = `/blog/${slug}`;
           </div>
         )}
 
-        <div class="prose max-w-none" set:html={html}></div>
+        <!-- 本文をモード別に切り替え -->
+        {post.editorMode === "html" ? (
+          <div class="prose max-w-none" set:html={post.bodyHtml}></div>
+        ) : (
+          <div class="prose max-w-none" set:html={richHtml}></div>
+        )}
 
         {post.tags?.length && (
           <div class="not-prose mt-10 flex flex-wrap gap-2">
