@@ -2,8 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { client } from "../../lib/sanity";
 import { postSlugsQuery, postBySlugQuery } from "../../lib/queries";
-import { PortableText } from "@portabletext/astro";
-import { portableTextComponents } from "../../lib/portableTextComponents";
+import PortableTextRenderer from "../../components/PortableTextRenderer"; // ✅ React Island
 
 export async function getStaticPaths() {
   const slugs = await client.fetch(postSlugsQuery);
@@ -94,10 +93,7 @@ const permalink = `/blog/${slug}`;
         {post.editorMode === "html" ? (
           <div class="prose max-w-none" set:html={post.bodyHtml}></div>
         ) : (
-          <PortableText
-            value={post.bodyRich}
-            components={portableTextComponents}
-          />
+          <PortableTextRenderer client:load value={post.bodyRich} />
         )}
 
         {post.tags?.length && (
