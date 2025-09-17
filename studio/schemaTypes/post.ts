@@ -37,16 +37,23 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    defineField({
-      name: "bodyRich",
-      title: "Body (Rich Text)",
-      type: "array",
-      of: [
-        { type: "block" },
-        { type: "image", options: { hotspot: true } },
-      ],
-      hidden: ({ parent }) => parent?.editorMode !== "rich",
-    }),
+defineField({
+  name: "bodyRich",
+  title: "Body (Rich Text)",
+  type: "array",
+  of: [
+    { type: "block" },
+    {
+      type: "code",
+      options: { language: "html" },
+    },
+    {
+      type: "image",
+      options: { hotspot: true },
+    },
+  ],
+  hidden: ({ parent }) => parent?.editorMode !== "rich",
+}),
 
     defineField({
       name: "bodyHtml",
