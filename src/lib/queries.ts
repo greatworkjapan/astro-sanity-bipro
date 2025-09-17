@@ -11,7 +11,13 @@ export const postSlugsQuery = `*[_type=="post" && defined(slug.current)]{"slug":
 
 export const postBySlugQuery = `
 *[_type=="post" && slug.current==$slug][0]{
-  _id, title, excerpt, publishedAt, body,
+  _id,
+  title,
+  excerpt,
+  publishedAt,
+  editorMode,
+  bodyRich,
+  bodyHtml,
   "slug": slug.current,
   "categories": categories[]->{"title": title, "slug": slug.current},
   "tags": tags[]->{"title": title, "slug": slug.current},
