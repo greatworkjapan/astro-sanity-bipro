@@ -23,48 +23,9 @@ export default defineType({
     }),
 
     defineField({
-      name: "editorMode",
-      title: "Editor Mode",
-      type: "string",
-      options: {
-        list: [
-          { title: "Rich Text", value: "rich" },
-          { title: "HTML", value: "html" },
-        ],
-        layout: "radio",
-      },
-      initialValue: "rich",
-      validation: (Rule) => Rule.required(),
-    }),
-
-defineField({
-  name: "bodyRich",
-  title: "Body (Rich Text)",
-  type: "array",
-  of: [
-    {
-      type: "block",
-      marks: {
-        decorators: [
-          { title: "Strong", value: "strong" },
-          { title: "Emphasis", value: "em" },
-          { title: "Underline", value: "underline" },
-          { title: "Code", value: "code" },
-        ],
-      },
-    },
-    {
-      type: "image",
-      options: { hotspot: true },
-    },
-  ],
-  hidden: ({ parent }) => parent?.editorMode !== "rich",
-}),
-
-    defineField({
       name: "bodyHtml",
       title: "Body (HTML)",
-      type: "code",
+      type: "text",
       options: { language: "html" },
       hidden: ({ parent }) => parent?.editorMode !== "html",
     }),
