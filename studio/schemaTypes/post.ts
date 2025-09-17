@@ -15,18 +15,51 @@ export default defineType({
       name: "slug",
       title: "Slug",
       type: "slug",
-      options: {
-        source: "title",
-        maxLength: 96,
-      },
+      options: { source: "title", maxLength: 96 },
       validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: "editorMode",
+      title: "Editor Mode",
+      type: "string",
+      options: {
+        list: [
+          { title: "Rich Text", value: "rich" },
+          { title: "HTML", value: "html" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "rich",
+      validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: "bodyRich",
+      title: "Body (Rich Text)",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          marks: {
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+              { title: "Underline", value: "underline" },
+              { title: "Code", value: "code" },
+            ],
+          },
+        },
+        { type: "image", options: { hotspot: true } },
+      ],
+      hidden: ({ parent }) => parent?.editorMode !== "rich",
     }),
 
     defineField({
       name: "bodyHtml",
       title: "Body (HTML)",
       type: "text",
-      options: { language: "html" },
+      rows: 20,
       hidden: ({ parent }) => parent?.editorMode !== "html",
     }),
 
@@ -42,23 +75,19 @@ export default defineType({
       title: "Tags",
       type: "array",
       of: [{ type: "reference", to: [{ type: "tag" }] }],
-      options: {
-        layout: "tags",
-      },
+      options: { layout: "tags" },
     }),
 
     defineField({
       name: "seoTitle",
       title: "SEO Title",
       type: "string",
-      description: "検索結果に表示されるタイトル（推奨 60文字以内）",
     }),
     defineField({
       name: "seoDescription",
       title: "SEO Description",
       type: "text",
       rows: 3,
-      description: "検索結果に表示される説明文（推奨 120〜160文字）",
     }),
 
     defineField({
