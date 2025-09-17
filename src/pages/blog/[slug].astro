@@ -1,53 +1,204 @@
 ---
-import { client } from "../../lib/sanity"
-import { postSlugsQuery, postBySlugQuery } from "../../lib/queries"
-import { renderPortableText } from "../../lib/portableText"
+import Layout from "../../layouts/Layout.astro";
+import { client } from "../../lib/sanity";
+import { postSlugsQuery, postBySlugQuery } from "../../lib/queries";
+import { renderPortableText } from "../../lib/portableText";
 
 export async function getStaticPaths() {
-  const slugs = await client.fetch(postSlugsQuery)
-  return slugs.map((s:any) => ({ params: { slug: s.slug }}))
+  const slugs = await client.fetch(postSlugsQuery);
+  return slugs.map((s: any) => ({ params: { slug: s.slug } }));
 }
 
-const { slug } = Astro.params
-const post = await client.fetch(postBySlugQuery, { slug })
+const { slug } = Astro.params;
+const post = await client.fetch(postBySlugQuery, { slug });
 
-if (!post) return Astro.redirect('/blog') // 念のため
+if (!post) return Astro.redirect("/blog"); // 念のため
 
-const html = renderPortableText(post.body)
+const html = renderPortableText(post.body);
+const permalink = `/blog/${slug}`;
 ---
 
-<html lang="ja">
-  <head>
-    <title>{post.seo?.seoTitle ?? post.title}</title>
-    {post.seo?.seoDescription && <meta name="description" content={post.seo.seoDescription} />}
-  </head>
-  <body>
-    <article>
-      <h1>{post.title}</h1>
-      <time datetime={post.publishedAt}>
-        {new Date(post.publishedAt).toLocaleDateString('ja-JP')}
-      </time>
+<Layout>
+  <article class="container mx-auto px-4 py-10">
+    <!-- Breadcrumbs -->
+    <nav class="mb-6 text-sm breadcrumbs text-gray-500" aria-label="breadcrumb">
+      <ul class="flex flex-wrap gap-1">
+        <li><a href="/" class="hover:underline">Home</a></li>
+        <li>/</li>
+        <li><a href="/blog" class="hover:underline">Blog</a></li>
+        <li>/</li>
+        <li aria-current="page" class="text-gray-700 font-medium">{post.title}</li>
+      </ul>
+    </nav>
 
-      <div set:html={html} />
+    <!-- Title & Meta -->
+    <header class="max-w-3xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight mb-3">
+        {post.title}
+      </h1>
+      <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+        {post.publishedAt && (
+          <time datetime={new Date(post.publishedAt).toISOString()}>
+            {new Date(post.publishedAt).toLocaleDateString("ja-JP", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </time>
+        )}
+        {post.author?.name && <span>by {post.author.name}</span>}
+        {post.tags?.length && (
+          <div class="flex flex-wrap gap-2">
+            {post.tags.map((t: any) => (
+              <a class="badge badge-outline" href={`/blog/tag/${t.slug}`}>
+                {t.title}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
 
-      {post.categories?.length && (
-        <p>カテゴリ：
-          {post.categories.map((c:any, i:number) => (
-            <>
-              <a href={`/blog/category/${c.slug}`}>{c.title}</a>{i < post.categories.length-1 ? ' / ' : ''}
-            </>
-          ))}
-        </p>
+      {post.mainImage?.url && (
+        <figure class="mt-6 rounded-2xl overflow-hidden border">
+          <img
+            src={`${post.mainImage.url}?w=1600&fit=max&auto=format`}
+            alt={post.mainImage?.alt ?? post.title}
+            loading="lazy"
+            class="w-full object-cover"
+          />
+          {post.mainImage?.caption && (
+            <figcaption class="text-xs text-gray-500 p-3">
+              {post.mainImage.caption}
+            </figcaption>
+          )}
+        </figure>
       )}
-      {post.tags?.length && (
-        <p>タグ：
-          {post.tags.map((t:any, i:number) => (
-            <>
-              <a href={`/blog/tag/${t.slug}`}>{t.title}</a>{i < post.tags.length-1 ? ' , ' : ''}
-            </>
-          ))}
-        </p>
-      )}
-    </article>
-  </body>
-</html>
+    </header>
+
+    <!-- Body Grid -->
+    <div class="mt-10 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-8">
+      <!-- Content -->
+      <div id="article" class="prose max-w-none">
+        {post.keypoints?.length && (
+          <div class="not-prose mb-8 p-5 rounded-2xl border bg-base-100">
+            <h2 class="font-semibold mb-3">この記事でわかること</h2>
+            <ul class="list-disc ml-5 space-y-1">
+              {post.keypoints.map((k: string) => (
+                <li>{k}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div class="prose max-w-none" set:html={html}></div>
+
+        {post.tags?.length && (
+          <div class="not-prose mt-10 flex flex-wrap gap-2">
+            {post.tags.map((t: any) => (
+              <a class="badge" href={`/blog/tag/${t.slug}`}>
+                {t.title}
+              </a>
+            ))}
+          </div>
+        )}
+
+        <nav class="not-prose mt-12 border-t pt-6 flex flex-col md:flex-row justify-between gap-3">
+          {post.prev && (
+            <a
+              class="btn btn-ghost justify-start"
+              href={`/blog/${post.prev.slug}`}
+            >
+              &larr; {post.prev.title}
+            </a>
+          )}
+          {post.next && (
+            <a
+              class="btn btn-ghost justify-end md:ml-auto"
+              href={`/blog/${post.next.slug}`}
+            >
+              {post.next.title} &rarr;
+            </a>
+          )}
+        </nav>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="order-first lg:order-last lg:sticky lg:top-24 space-y-6">
+        <div class="card border">
+          <div class="card-body">
+            <h3 class="card-title text-base">目次</h3>
+            <nav id="toc" class="text-sm leading-6"></nav>
+          </div>
+        </div>
+        <div class="card border">
+          <div class="card-body">
+            <h3 class="card-title text-base">シェア</h3>
+            <div class="flex gap-2">
+              <a
+                class="btn btn-sm"
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                  permalink
+                )}&text=${encodeURIComponent(post.title)}`}
+                target="_blank"
+                rel="noopener"
+                >X/Twitter</a
+              >
+              <a
+                class="btn btn-sm"
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                  permalink
+                )}`}
+                target="_blank"
+                rel="noopener"
+                >Facebook</a
+              >
+              <a
+                class="btn btn-sm"
+                href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(
+                  permalink
+                )}`}
+                target="_blank"
+                rel="noopener"
+                >LINE</a
+              >
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <!-- Client-side TOC generator -->
+  <script>
+    (function () {
+      const article = document.getElementById("article");
+      const toc = document.getElementById("toc");
+      if (!article || !toc) return;
+      const headings = Array.from(article.querySelectorAll("h2, h3"));
+      if (!headings.length) {
+        toc.textContent = "見出しはありません";
+        return;
+      }
+      const ul = document.createElement("ul");
+      ul.className = "space-y-1";
+      headings.forEach((h) => {
+        if (!h.id) {
+          h.id = h.textContent
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9\-]/g, "");
+        }
+        const li = document.createElement("li");
+        if (h.tagName === "H3") li.className = "ml-4";
+        const a = document.createElement("a");
+        a.href = `#${h.id}`;
+        a.textContent = h.textContent;
+        a.className = "hover:underline";
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      toc.appendChild(ul);
+    })();
+  </script>
+</Layout>
