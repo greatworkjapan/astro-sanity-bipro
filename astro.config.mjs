@@ -20,7 +20,7 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  experimental: {
-    inlineStylesheets: "auto",
-  },
+  // エラーの原因となっていた 'experimental' ブロックを削除しました
+  // もしくは、無効な設定である 'inlineStylesheets: "auto"' のみ削除します。
+  // 今回はエラーログの診断に基づき、ブロック全体を削除するのが最も確実です。
 });
