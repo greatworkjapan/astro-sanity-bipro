@@ -108,7 +108,7 @@ const permalink = `/blog/${slug}`;
           </div>
         )}
 
-        <nav class="not-prose mt-12 border-t pt-6 flex flex-col md:flex-row justify-between gap-3">
+        <nav class="not-prose mt-12 border-t pt-6 flex flex-col md:flex-row justify-between gap-3 mx-auto max-w-screen-xl">
           {post.prev && (
             <a
               class="btn btn-ghost justify-start"
@@ -129,7 +129,7 @@ const permalink = `/blog/${slug}`;
       </div>
 
       {/* Sidebar */}
-      <aside class="order-first lg:order-last lg:sticky lg:top-24 space-y-6 max-w-screen-xl">
+      <aside class="order-first lg:order-last lg:sticky lg:top-24 space-y-6 max-w-screen-xl mx-auto">
         <div class="card border">
           <div class="card-body">
             <h3 class="card-title text-base">目次</h3>
