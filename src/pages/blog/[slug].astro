@@ -77,9 +77,9 @@ const permalink = `/blog/${slug}`;
     </header>
 
     {/* Body Grid */}
-    <div class="mt-10 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-8 max-w-screen-xl">
+    <div class="mt-10 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-8 mx-auto max-w-screen-xl">
       {/* Content */}
-      <div id="article" class="prose max-w-none">
+      <div id="article" class="prose">
         {post.keypoints?.length && (
           <div class="not-prose mb-8 p-5 rounded-2xl border bg-base-100">
             <h2 class="font-semibold mb-3">この記事でわかること</h2>
