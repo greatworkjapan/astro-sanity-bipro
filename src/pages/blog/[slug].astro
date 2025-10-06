@@ -99,7 +99,7 @@ const permalink = `/blog/${slug}`;
         )}
 
         {post.tags?.length && (
-          <div class="not-prose mt-10 flex flex-wrap gap-2">
+          <div class="not-prose mt-10 flex flex-wrap gap-2 mx-auto max-w-screen-xl">
             {post.tags.map((t: any) => (
               <a class="badge" href={`/blog/tag/${t.slug}`}>
                 {t.title}
