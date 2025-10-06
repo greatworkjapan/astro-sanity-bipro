@@ -78,13 +78,13 @@ const permalink = `/blog/${slug}`;
     <div class="mt-10 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-8 mx-auto max-w-screen-xl">
       {/* Content */}
       <div id="article" class="prose">
-        <div class="not-prose mb-8 p-5 rounded-2xl border bg-base-100">
+        <div class="not-prose mb-8 p-5 rounded-2xl border">
           <h2 class="font-semibold mb-3">目次</h2>
           <nav id="toc" class="text-sm leading-6"></nav>
         </div>
 
         {post.keypoints?.length && (
-          <div class="not-prose mb-8 p-5 rounded-2xl border bg-base-100">
+          <div class="not-prose mb-8 p-5 rounded-2xl border">
             <h2 class="font-semibold mb-3">この記事でわかること</h2>
             <ul class="list-disc ml-5 space-y-1">
               {post.keypoints.map((k: string) => (
